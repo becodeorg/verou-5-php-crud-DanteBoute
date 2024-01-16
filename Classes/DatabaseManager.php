@@ -14,7 +14,7 @@ class DatabaseManager
     // We could also use a private variable and a getter (but let's not make things too complicated at this point)
     public PDO $connection;
 
-    public function __construct() {
+    public function __construct($host, $user, $password, $dbname) {
         $this->connect();
     }
 
