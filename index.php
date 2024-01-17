@@ -16,17 +16,10 @@ require_once 'classes/CardRepository.php';
 $databaseManager = new DatabaseManager($config['host'], $config['user'], $config['password'], $config['dbname']);
 $databaseManager->connect();
 
-// This example is about a Pokémon card collection
-// Update the naming if you'd like to work with another collection
+
 $cardRepository = new CardRepository($databaseManager);
 $cards = $cardRepository->get();
 
-// Get the current action to execute
-// If nothing is specified, it will remain empty (home should be loaded)
-//$page = $_SERVER["REQUEST_URI"];
-//$BASE_PATH = "localhost/becode-Mountain/CRUD/";
-// Load the relevant action
-// This system will help you to only execute the code you want, instead of all of it (or complex if statements)
 $action = $_GET["action"] ?? null;
 
 switch ($action) {
@@ -59,7 +52,6 @@ function create($databaseManager)
         $cardRepository->create();
         overview($databaseManager);
     } else require 'add.php';
-    // TODO: provide the create logic
 }
 function edit($databaseManager){
     if (isset($_POST['submit'])) {
