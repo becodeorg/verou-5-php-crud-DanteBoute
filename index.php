@@ -1,7 +1,7 @@
 <?php
 
 // Require the correct variable type to be used (no auto-converting)
-declare (strict_types = 1);
+declare(strict_types=1);
 
 // Show errors so we get helpful information
 ini_set('display_errors', '1');
@@ -23,23 +23,23 @@ $cards = $cardRepository->get();
 
 // Get the current action to execute
 // If nothing is specified, it will remain empty (home should be loaded)
-$page = $_SERVER["REQUEST_URI"];
-$BASE_PATH = "localhost/becode-Mountain/CRUD/";
+//$page = $_SERVER["REQUEST_URI"];
+//$BASE_PATH = "localhost/becode-Mountain/CRUD/";
 // Load the relevant action
 // This system will help you to only execute the code you want, instead of all of it (or complex if statements)
-switch ($page) {
-    case $BASE_PATH:
-        overview($databaseManager);
-        break;
-    case $BASE_PATH . 'create':
+$action = $_GET["action"] ?? null;
+
+switch ($action) {
+    case 'create':
         create($databaseManager);
         break;
-    case $BASE_PATH . 'edit':
-        echo "Editing ...";
+    case 'edit':
+        edit($databaseManager);
         break;
     default:
         overview($databaseManager);
         break;
+    
 }
 
 function overview($databaseManager)
@@ -51,10 +51,21 @@ function overview($databaseManager)
 
 function create($databaseManager)
 {
-    if(isset($_POST['submit'])) {
+    if (isset($_POST['submit'])) {
         $cardRepository = new CardRepository($databaseManager);
         $cardRepository->create();
-    }
-    require 'createView.php';
+        overview($databaseManager);
+    } else require 'add.php';
     // TODO: provide the create logic
+}
+function edit($databaseManager){
+    if (isset($_POST['submit'])) {
+        $cardRepository = new CardRepository($databaseManager);
+        $cardRepository->update();
+        overview($databaseManager);
+    } else {
+        $cardRepository = new CardRepository($databaseManager);
+        $pokemon = $cardRepository->find()[0];
+        
+        require 'edit.php';}
 }

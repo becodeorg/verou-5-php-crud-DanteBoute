@@ -15,44 +15,35 @@ class CardRepository
 
     public function create(): void
     {
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $name = $_POST["name"];
-            $amount = $_POST["amount"];
-            $type = $_POST["type"];
-        
-            try {
-                require_once "overview.php";
-        
-                $sql = "INSERT INTO cards (name, amount, type) 
-                VALUES (?, ?, ?);";
-        
-                $statement = $pdo->prepare($query); 
-                $statement->execute([$name, $amount, $type]);
-                die();
-            } catch (PDOException $error) {
-                die("Query failed: ". $error->getMessage());
-            };
-        } else {
-            header("Location: ../index.php");
-        }
+        $name = $_POST["name"];
+        $amount = $_POST["amount"];
+        $type = $_POST["type"];
+    
+        try {
+            $sql = "INSERT INTO cards (name, amount, type)
+            VALUES (?, ?, ?);";
+    
+            $statement = $this->databaseManager->connection->prepare($sql);
+            $statement->execute([$name, $amount, $type]);
+        } catch (PDOException $error) {
+            die("Query failed: ". $error->getMessage());
+        };
     }
 
     // Get one
     public function find(): array
-    
     {
-        $sql = "SELECT * FROM cards WHERE type = :type;";
-
-    try {
-        $statement = $this->databaseManager->connection->prepare($sql);
-        $statement->bindParam(':type', $type, PDO::PARAM_STR);
-        $statement->execute();
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException $error) {
-        echo "Error: " . $error->getMessage();
-        // Handle the error appropriately (e.g., log it or return an empty array)
-        return [];
-    }
+        try {
+            $sql = "SELECT * FROM cards WHERE id = :id ;";
+            $statement = $this->databaseManager->connection->prepare($sql);
+            $statement->bindParam(':id', $_GET['id']);
+            $statement->execute();
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $error) {
+            echo "Error: " . $error->getMessage();
+            // Handle the error appropriately (e.g., log it or return an empty array)
+            return [];
+        }
     }
 
     // Get all
@@ -80,18 +71,17 @@ class CardRepository
         // We get the database connection first, so we can apply our queries with it
         // return $this->databaseManager->connection-> (runYourQueryHere)
 
-        public function update($cardId, $newData): void
+        public function update(): void
         {
-            $sql = "UPDATE cards SET name = :name, type = :type, amount = :amount WHERE id = :id";
-    
             try {
+                $sql = "UPDATE cards SET name = :name, type = :type, amount = :amount WHERE id = :id";
                 $statement = $this->databaseManager->connection->prepare($sql);
     
                 // Bind parameters
-                $statement->bindParam(':id', $cardId, PDO::PARAM_INT);
-                $statement->bindParam(':name', $newData['name'], PDO::PARAM_STR);
-                $statement->bindParam(':type', $newData['type'], PDO::PARAM_STR);
-                $statement->bindParam(':amount', $newData['amount'], PDO::PARAM_INT);
+                $statement->bindParam(':id', $_GET['id'], PDO::PARAM_INT);
+                $statement->bindParam(':name', $_POST['name'], PDO::PARAM_STR);
+                $statement->bindParam(':type', $_POST['type'], PDO::PARAM_STR);
+                $statement->bindParam(':amount', $_POST['amount'], PDO::PARAM_INT);
     
                 // Execute the query
                 $statement->execute();
@@ -101,9 +91,17 @@ class CardRepository
             }
         }
 
-    public function delete(): void
+    public function delete($cardId): void
     {
+      $sql = "DELETE FROM table_name WHERE condition;";
+    try {
+        $statement = $this->databaseManager->connection->prepare($sql);
 
+        $statement->bindParam(':id', $cardId, PDO::PARAM_INT);
+
+    }  catch (PDOException $error) {
+        echo "Error: " . $error->getMessage();
+    }
     }
 
 }

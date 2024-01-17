@@ -10,15 +10,15 @@
 <br>
 <form method="post">
     <label for="name">Name:</label>
-    <input type="text" id="name" name="name" value=<?= $pokemon['name']?> required>
+    <input type="text" id="name" name="name" required>
     <br>
 
     <label for="amount">Amount:</label>
-    <input type="number" id="amount" name="amount" value=<?= $pokemon['amount']?> required>
+    <input type="number" id="amount" name="amount" required>
     <br>
 
     <label for="type">Type:</label>
-    <input type="text" id="type" name="type" value=<?= $pokemon['type']?> required>
+    <input type="text" id="type" name="type" required>
     <br>
 
     <button type="submit" name="submit">Submit</button>

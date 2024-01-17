@@ -12,29 +12,16 @@
 
 <h1>My Pokémon card collection</h1>
 <br>
-<h3>Add a new card</h3>
-<form action="edit.php" method="post">
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name" required>
-    <br>
 
-    <label for="amount">Amount:</label>
-    <input type="number" id="amount" name="amount" required>
-    <br>
-
-    <label for="type">Type:</label>
-    <input type="text" id="type" name="type" required>
-    <br>
-
-    <button type="submit">Submit</button>
-</form>
-
+<a href="?action=create" class="edit-button">Add Card</a>
 <ul>
     <?php foreach ($cards as $card) : ?>
         <li>
             Name: <?= $card['name'] ?>,
             Amount: <?= $card['amount'] ?>,
             Type: <?= $card['type'] ?>
+            <a href="?action=edit&id=<?= $card['id'] ?>">Edit</a>
+            <a href="?action=delete&id=<?= $card['id'] ?>">Delete</a>
         </li>
     <?php endforeach; ?>
 </ul>
