@@ -5,17 +5,20 @@
 class DatabaseManager
 {
     // These are private: only this class needs them
-    private $host = "localhost";
-    private $dbname = "pokemonCards";
-    private $user = "root";
-    private $password = "";
+    private $host;
+    private $dbname;
+    private $user;
+    private $password;
 
     // This one is public, so we can use it outside of this class
     // We could also use a private variable and a getter (but let's not make things too complicated at this point)
     public PDO $connection;
 
     public function __construct($host, $user, $password, $dbname) {
-        $this->connect();
+       $this->host = $host;
+       $this->dbname = $dbname;
+       $this->user = $user;
+       $this->password = $password;
     }
 
     public function connect(): void {
@@ -25,7 +28,6 @@ class DatabaseManager
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
             // last line makes the data coming back from the DB an associative array
-            echo "db connected";
         } catch (PDOException $error) {
             echo $error->getMessage();
         }

@@ -15,11 +15,30 @@ class CardRepository
 
     public function create(): void
     {
-
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $name = $_POST["name"];
+            $amount = $_POST["amount"];
+            $type = $_POST["type"];
+        
+            try {
+                require_once "overview.php";
+        
+                $sql = "INSERT INTO cards (name, amount, type) 
+                VALUES (?, ?, ?);";
+        
+                $statement = $pdo->prepare($query); 
+                $statement->execute([$name, $amount, $type]);
+                die();
+            } catch (PDOException $error) {
+                die("Query failed: ". $error->getMessage());
+            };
+        } else {
+            header("Location: ../index.php");
+        }
     }
 
     // Get one
-    public function find()
+    public function find(): array
     
     {
         $sql = "SELECT * FROM cards WHERE type = :type;";
