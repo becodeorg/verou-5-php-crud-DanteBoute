@@ -23,27 +23,38 @@ $cards = $cardRepository->get();
 
 // Get the current action to execute
 // If nothing is specified, it will remain empty (home should be loaded)
-$action = $_GET['action'] ?? null;
-
+$page = $_SERVER["REQUEST_URI"];
+$BASE_PATH = "localhost/becode-Mountain/CRUD/";
 // Load the relevant action
 // This system will help you to only execute the code you want, instead of all of it (or complex if statements)
-switch ($action) {
-    case 'create':
-        create();
+switch ($page) {
+    case $BASE_PATH:
+        overview($databaseManager);
+        break;
+    case $BASE_PATH . 'create':
+        create($databaseManager);
+        break;
+    case $BASE_PATH . 'edit':
+        echo "Editing ...";
         break;
     default:
-        overview();
+        overview($databaseManager);
         break;
 }
 
-function overview()
+function overview($databaseManager)
 {
-    // Load your view
-    // Tip: you can load this dynamically and based on a variable, if you want to load another view
+    $pokemonCard = new CardRepository($databaseManager);
+    $cards = $pokemonCard->get();
     require 'overview.php';
 }
 
-function create()
+function create($databaseManager)
 {
+    if(isset($_POST['submit'])) {
+        $cardRepository = new CardRepository($databaseManager);
+        $cardRepository->create();
+    }
+    require 'createView.php';
     // TODO: provide the create logic
 }
