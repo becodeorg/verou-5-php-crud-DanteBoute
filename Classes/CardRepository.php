@@ -91,13 +91,14 @@ class CardRepository
             }
         }
 
-    public function delete($cardId): void
+    public function delete(): void
     {
-      $sql = "DELETE FROM table_name WHERE condition;";
     try {
+        $sql = "DELETE FROM cards WHERE id = :id;";
         $statement = $this->databaseManager->connection->prepare($sql);
 
-        $statement->bindParam(':id', $cardId, PDO::PARAM_INT);
+        $statement->bindParam(':id', $_GET['id'], PDO::PARAM_INT);
+        $statement->execute();
 
     }  catch (PDOException $error) {
         echo "Error: " . $error->getMessage();
@@ -105,3 +106,6 @@ class CardRepository
     }
 
 }
+
+// Switch - Case delete
+// Function delete

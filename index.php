@@ -36,6 +36,9 @@ switch ($action) {
     case 'edit':
         edit($databaseManager);
         break;
+    case 'delete':
+        delete($databaseManager);
+        break;
     default:
         overview($databaseManager);
         break;
@@ -68,4 +71,9 @@ function edit($databaseManager){
         $pokemon = $cardRepository->find()[0];
         
         require 'edit.php';}
+}
+function delete($databaseManager){
+        $cardRepository = new CardRepository($databaseManager);
+        $cardRepository->delete();
+        overview($databaseManager);
 }
